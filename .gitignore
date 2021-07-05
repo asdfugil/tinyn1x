@@ -1,0 +1,4 @@
+initramfs.cpio.zst
+boot.img
+rootfs/
+checkra1n
