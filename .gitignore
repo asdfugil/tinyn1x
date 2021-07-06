@@ -1,4 +1,7 @@
 initramfs.cpio.zst
-boot.img
+boot.iso
 rootfs/
+syslinux-*/
+CD_Root/
+isolinux.cfg
 checkra1n

@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 CHECKRA1N_I486_URL="https://assets.checkra.in/downloads/linux/cli/i486/77779d897bf06021824de50f08497a76878c6d9e35db7a9c82545506ceae217e/checkra1n"
-BOOTLOADER="boot.S"
-OUTPUT="boot.img"
+SYSLINUX="https://mirrors.edge.kernel.org/pub/linux/utils/boot/syslinux/syslinux-6.03.tar.xz"
 KERN="./linux/arch/x86/boot/bzImage"
 RD="./initramfs.cpio.zst"
+VERSION=1.0
 export CFLAGS="-m32 -march=i486"
 export CXXFLAGS="-m32 -march=i486"
 
+rm -rf rootfs syslinux-*/ CD_Root
 # kernel
 if [ ! -f "./linux/.build_complete" ]; then
 cp .config linux
@@ -15,7 +16,6 @@ make -j$(nproc) && touch .build_complete
 cd ..
 fi
 # initramfs
-rm -rf rootfs
  # base structure
 mkdir -p rootfs/usr/{bin,sbin}
 mkdir -p rootfs/{dev,sys,proc,tmp,var,lib}
@@ -36,27 +36,22 @@ cp -dpR /dev/{tty,console,null,zero,full} rootfs/dev
 cd rootfs
 find . | fakeroot cpio -oH newc | zstd -c19 > ../initramfs.cpio.zst
 cd ..
-# bootloader
- # size of kern + ramdisk
-K_SZ=`stat -c %s $KERN`
-R_SZ=`stat -c %s $RD`
-
- # padding to make it up to a sector
-K_PAD=$((512 - $K_SZ % 512))
-R_PAD=$((512 - $R_SZ % 512))
-
-nasm -o $OUTPUT -D initRdSizeDef=$R_SZ $BOOTLOADER
-# image
-cat $KERN >> $OUTPUT
-if [[ $K_PAD -lt 512 ]]; then
-    dd if=/dev/zero bs=1 count=$K_PAD >> $OUTPUT
-fi
-
-cat $RD >> $OUTPUT
-if [[ $R_PAD -lt 512 ]]; then
-    dd if=/dev/zero bs=1 count=$R_PAD >> $OUTPUT
-fi
-
-TOTAL=`stat -c %s $OUTPUT`
-
-echo "$OUTPUT is ready. ($TOTAL)"
+ # bootloader
+wget -O- $SYSLINUX | tar -xJ
+mkdir -p CD_Root/{isolinux,images,kernel}
+cp syslinux-*/bios/core/isolinux.bin CD_Root/isolinux
+cp syslinux-*/bios/com32/elflink/ldlinux/ldlinux.c32 CD_Root/isolinux
+cp syslinux-*/bios/memdisk/memdisk CD_Root/kernel
+cp $KERN CD_Root/vmlinuz
+cp $RD CD_Root/rfs.zst
+# boot config
+cat << EOF > isolinux.cfg
+SAY Tinyn1x-$VERSION
+DEFAULT tinyn1x
+LABEL tinyn1x
+LINUX /vmlinuz
+INITRD /rfs.zst
+EOF
+cp isolinux.cfg CD_Root/isolinux
+# make .iso
+mkisofs -o boot.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table CD_Root
