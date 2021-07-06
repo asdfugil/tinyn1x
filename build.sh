@@ -24,8 +24,8 @@ ln -s /usr/bin rootfs/bin
 ln -s /usr/sbin rootfs/sbin
  # copy resources
 cp busybox rootfs/usr/bin
-#wget -O rootfs/usr/bin/checkra1n $CHECKRA1N_I486_URL
-cp checkra1n rootfs/usr/bin/checkra1n
+wget -O rootfs/usr/bin/checkra1n $CHECKRA1N_I486_URL
+#cp checkra1n rootfs/usr/bin/checkra1n
 cp init rootfs
 cp ld-musl-i386.so.1 rootfs/lib
 chmod +x rootfs/usr/bin/checkra1n
