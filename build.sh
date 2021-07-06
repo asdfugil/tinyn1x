@@ -24,8 +24,8 @@ ln -s /usr/bin rootfs/bin
 ln -s /usr/sbin rootfs/sbin
  # copy resources
 cp busybox rootfs/usr/bin
-wget -O rootfs/usr/bin/checkra1n $CHECKRA1N_I486_URL
-# cp checkra1n rootfs/usr/bin/checkra1n
+#wget -O rootfs/usr/bin/checkra1n $CHECKRA1N_I486_URL
+cp checkra1n rootfs/usr/bin/checkra1n
 cp init rootfs
 cp ld-musl-i386.so.1 rootfs/lib
 chmod +x rootfs/usr/bin/checkra1n
@@ -55,3 +55,4 @@ EOF
 cp isolinux.cfg CD_Root/isolinux
 # make .iso
 mkisofs -o boot.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table CD_Root
+isohybrid boot.iso

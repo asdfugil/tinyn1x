@@ -7,7 +7,7 @@ Debian:
 
 ```
 sudo apt build-dep linux-source
-sudo apt install nasm wget
+sudo apt install mkisofs syslinux-utils wget
 ```
 
 2. Modify variables at top of build.sh if needed.
