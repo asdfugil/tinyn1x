@@ -37,10 +37,9 @@ chmod 755 rootfs/dev/pts
 ln -s /tmp rootfs/var/tmp
 ln -s /usr/bin rootfs/bin
 ln -s /usr/sbin rootfs/sbin
- # copy resources
 cp busybox/busybox rootfs/usr/bin
-#wget -O rootfs/usr/bin/checkra1n $CHECKRA1N_I486_URL
-cp checkra1n rootfs/usr/bin/checkra1n
+wget -O rootfs/usr/bin/checkra1n $CHECKRA1N_I486_URL
+#cp checkra1n rootfs/usr/bin/checkra1n
 cp assets/{fs,init}tab rootfs/etc
 cp assets/init rootfs
 cp scripts/* rootfs/usr/bin
