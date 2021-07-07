@@ -1,0 +1,4 @@
+#!/bin/busybox sh
+echo "Press enter to run checkra1n";
+read $E
+checkra1n -cv

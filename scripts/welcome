@@ -1,0 +1,11 @@
+#!/bin/busybox sh
+/bin/busybox clear
+/bin/busybox cat << EOF
+Alt+F1: Welcome
+Alt+F2: Checkra1n
+Alt+F3: Checkra1n Safe Mode
+Alt+F4: Checkra1n Force Revert
+Alt+F5: Shell
+Alt+F6: Shell
+EOF
+/bin/busybox sleep 9999

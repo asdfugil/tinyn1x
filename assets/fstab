@@ -1,0 +1,6 @@
+none / tmpfs rw 0 0
+none /proc proc rw 0 0
+none /dev/pts devpts rw 0 0
+none /sys sysfs rw 0 0
+none /dev/shm tmpfs size=1048576 rw 0 0
+
