@@ -14,7 +14,7 @@ sudo apt install mkisofs syslinux-utils wget
 3. Build!
 
 ```
-sudo build.sh
+sudo ./build.sh
 ```
 
 The generated boot image is at `boot.iso`
